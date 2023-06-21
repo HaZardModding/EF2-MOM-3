@@ -168,12 +168,15 @@ void mom_exitMenuPlayer(entity ePlayer)
 {
 	if(doesEntityExist(ePlayer))
 	{
-		ePlayer.give("models/weapons/worldmodel-Knife.tik");
-		mom_waitOneFrame();
-		ePlayer.use("Knife");
+		//MOM-3.0 - Chrissstrahl prevent player using knife (and putting away their weapon) if player is actually not in a menu
 		string 		sMenuName;
 		sMenuName	= ePlayer.getStringVar("mom_menuName");
-		ePlayer.removeHud(sMenuName);
+		if(sMenuName != ""){
+			ePlayer.give("models/weapons/worldmodel-Knife.tik");
+			mom_waitOneFrame();
+			ePlayer.removeHud(sMenuName);
+		}
+		ePlayer.use("Knife");
 	}
 }
 
