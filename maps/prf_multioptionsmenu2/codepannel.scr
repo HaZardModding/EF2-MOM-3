@@ -6,8 +6,8 @@
 //Global Variables, can be accessed by all Functions/scriptfiles
 //if definied outside a function, just like this
 ////////////////////////////////////////////////////////////////////////////////
-float 	float_codepanelCurrentNumber,
-		float_codepanelLastUsed;
+float 	float_codepanelLastUsed;
+string	string_codepanelCurrentNumber;
 
 //declaration
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,17 +36,24 @@ void codepanel()
 //this function is started once the trigger is used
 {
 //create internal variables, used only inside this function
-	float	fcodepanelLastUsed,
-			fCombinationIndex,
-			fCurrentCorrectNumber,
-			fError;
+	float	fCodeLength,
+			fcodepanelLastUsed,
+			fCombinationIndex;
+	string	sCode,
+			sCodeCombo,
+			sTargetname;
 			
-	entity	eTrigger,ePlayer;
+	entity	eTrigger,ePlayer,eRelay;
 	eTrigger = getCurrentEntity();
 	if(doesEntityExist(eTrigger))
 	{
 		ePlayer = eTrigger.getLastActivatingEntity();
 	}
+	
+	sCodeCombo	= "";
+	sCode		= eTrigger.getStringVar("uservar3");
+	fCodeLength	= eTrigger.getFloatVar("uservar4");
+	sTargetname	= eTrigger.getRawTargetname();
 	
 //set equal here, below it will respond to change
 	fcodepanelLastUsed		= float_codepanelLastUsed;
@@ -62,73 +69,56 @@ void codepanel()
 			
 		//remember the last time a function has been used
 			fcodepanelLastUsed = float_codepanelLastUsed;
-			
-		//see where we are at the current Index
-		//and grab the numnber that would be correct
-		//to input in order to crack the code combination
-			if(fCombinationIndex==1)
-			{
-				fCurrentCorrectNumber 		= 2;
-			}
-			else if(fCombinationIndex==2)
-			{
-				fCurrentCorrectNumber 		= 4;
-			}
-			else if(fCombinationIndex==3)
-			{
-				fCurrentCorrectNumber 		= 6;
-			}
-			else
-			{
-				fCurrentCorrectNumber 		= 8;
-			}		
-		//compare the nuber from the user input to the correct number
-		//if the number is wrong, mark the error
-			if(float_codepanelCurrentNumber != fCurrentCorrectNumber)
-			{
-				fError=1;
-			}
+		//combine entered code
+			sCodeCombo = (sCodeCombo + string_codepanelCurrentNumber);		
 			
 		//once all numbers have been entred,
 		//check if the combination is correct
-			if(fCombinationIndex == 4)
+			if(fCombinationIndex == fCodeLength)
 			{
 			//remove the Menu from the player again
 				thread mom_exitMenuPlayer(ePlayer);
 				
-			//code incorrect
-				if(fError == 1)
+			//needed to run success/fail thread
+				eRelay = spawn("trigger_relay");
+				mom_waitOneFrame();
+				eRelay.origin(eTrigger.getOrigin());
+				eRelay.bind(eTrigger);				
+				
+			//compare code
+				if(sCode == sCodeCombo)
 				{
-				//let the player know whats happening
-					mom_showMessagePlayer(ePlayer,"Code INCORRECT!");
+				//clear thread, so the code can no longer be entered
+					eTrigger.thread("");
 					
-				//exit this fnction now				
-					return;
+				//set success thread
+					eRelay.thread(sTargetname+"_success");
+				
+				//let the player know whats happening
+					mom_showMessagePlayer(ePlayer,"Code Accepted...");		
+
+				//remove symbol
+					eTrigger = getEntity(eTrigger.getRawTargetname()+"_symbol");
+					if(doesEntityExist(eTrigger))
+					{
+						eTrigger.remove();
+					}
 				}
-			//code correct
 				else
 				{
 				//let the player know whats happening
-					mom_showMessagePlayer(ePlayer,"Code Accepted...");
-					
-				//unlock the door
-					$door1.unlock();
-					
-				//remove the symbol
-					$codepanel_symbol.remove();
-					
-				//clear thread, so the trigger does no longer start the code menu
-					$codepanel_trigger.thread("");
-					
-				//exit this fnction now
-					return;	
+					mom_showMessagePlayer(ePlayer,"Code INCORRECT!");
+				//set fail thread
+					eRelay.thread(sTargetname+"_fail");				
 				}
-			
-			//reset variables, allow restart
-			//not used so far
-				//fcodepanelLastUsed		= float_codepanelLastUsed;
-				//fCombinationIndex	= 0;
-				//fError				= 0;
+				
+				//start eigther success or fail thread
+					mom_doActivate(eRelay,ePlayer);
+					mom_waitOneFrame();
+					eRelay.remove();
+				
+				//exit here
+					return;
 			}
 		}
 	//pause a moment or you will get a run away loop error
@@ -140,70 +130,70 @@ void codepanel_One()
 //this function is called when option 1 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=1;
+	string_codepanelCurrentNumber="1";
 	//centerprint("used one\n");
 }
 void codepanel_Two()
 //this function is called when option 2 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=2;
+	string_codepanelCurrentNumber="2";
 	//centerprint("used two\n");
 }
 void codepanel_Three()
 //this function is called when option 3 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=3;
+	string_codepanelCurrentNumber="3";
 	//centerprint("used three\n");
 }
 void codepanel_Four()
 //this function is called when option 4 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=4;
+	string_codepanelCurrentNumber="4";
 	//centerprint("used four\n");
 }
 void codepanel_Five()
 //this function is called when option 5 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=5;
+	string_codepanelCurrentNumber="5";
 	//centerprint("used five\n");
 }
 void codepanel_Six()
 //this function is called when option 6 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=6;
+	string_codepanelCurrentNumber="6";
 	//centerprint("used six\n");
 }
 void codepanel_Seven()
 //this function is called when option 7 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=7;
+	string_codepanelCurrentNumber="7";
 	//centerprint("used seven\n");
 }
 void codepanel_Eight()
 //this function is called when option 8 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=8;
+	string_codepanelCurrentNumber="8";
 	//centerprint("used eight\n");
 }
 void codepanel_Nine()
 //this function is called when option 9 is used
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=9;
+	string_codepanelCurrentNumber="9";
 	//centerprint("used nine\n");
 }
 //this function is called when option 10 is used
 void codepanel_Zero()
 {
 	float_codepanelLastUsed = getLevelTime();
-	float_codepanelCurrentNumber=0;
+	string_codepanelCurrentNumber="0";
 	//centerprint("used zero\n");
 }
 

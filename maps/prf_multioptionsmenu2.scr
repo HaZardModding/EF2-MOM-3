@@ -2,6 +2,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
+//added targetname uservar3(string) uservar4(float) support for triggerrelay
+//codepannels use now uservar3 for the code as string and uservar4 to set the code length, as integer
+
 //Global Variables, can be accessed by all Functions/scriptfiles, if placed here
 ////////////////////////////////////////////////////////////////////////////////
 /* None in this file */
@@ -11,6 +14,8 @@
 void	main();
 void	killlamp1();
 void	equipWithWeapon();
+void codepanel_trigger_success();
+void codepanel_trigger_fail();
 
 //include other scripts/////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -104,6 +109,21 @@ void equipWithWeapon()
 			}
 		}
 	}
+}
+
+void codepanel_trigger_success()
+//code has been entered correctly
+{
+//unlock the door
+	$door1.unlock();
+//open the door
+	$door1.open($world);
+}
+void codepanel_trigger_fail()
+//code has been entered incorrectly
+{
+//kill the light
+	thread killlamp1();
 }
 
 //look at the other included scripts to see how this thing works////////////////

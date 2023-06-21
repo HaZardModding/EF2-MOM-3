@@ -4403,13 +4403,14 @@
 }
 // entity 42
 {
-"uservar3" "codepanel_noMenu"
+"uservar4" "4"
+"uservar3" "2468"
 "targetname" "codepanel_trigger"
 "thread" "mom_basic"
 "classname" "trigger_use"
 "uservar1" "mom_codepanel2"
 "uservar2" "codepanel"
-"Note" "Uservar1 = menu name, Uservar2 = thread name, Uservar3 = fallback thread name"
+"Note" "Uservar1=menu #2=thread name #3=code #4=codelength"
 // brush 0
 {
 ( -602 222 72 ) ( -628 222 72 ) ( -628 214 72 ) common/trigger 0 0 0 0.5 0.5 0 128 0 
