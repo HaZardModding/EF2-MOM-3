@@ -20,13 +20,13 @@ void codepanel_trigger_fail();
 //include other scripts/////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //my MOM script
-#include "maps/prf_multioptionsmenu2/multioptions.scr"//include first, so all other scripts can use the functions from this script
+#include "maps/prf_multioptionsmenu3/multioptions.scr"//include first, so all other scripts can use the functions from this script
 //other scripts
-#include "maps/prf_multioptionsmenu2/transporter.scr"
-#include "maps/prf_multioptionsmenu2/replicator.scr"
-#include "maps/prf_multioptionsmenu2/codepannel.scr"
-#include "maps/prf_multioptionsmenu2/fontain.scr"
-#include "maps/prf_multioptionsmenu2/lift.scr"
+#include "maps/prf_multioptionsmenu3/transporter.scr"
+#include "maps/prf_multioptionsmenu3/replicator.scr"
+#include "maps/prf_multioptionsmenu3/codepannel.scr"
+#include "maps/prf_multioptionsmenu3/fontain.scr"
+#include "maps/prf_multioptionsmenu3/lift.scr"
 
 
 //functions
